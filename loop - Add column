@@ -1,0 +1,66 @@
+In the video, Hugo showed you how to add the length of the country names of the brics DataFrame in a new column:
+
+{for lab, row in brics.iterrows() :
+    brics.loc[lab, "name_length"] = len(row["country"])}
+    
+You can do similar things on the cars DataFrame.
+
+
+--------------------------------------
+
+
+# Import cars data
+import pandas as pd
+cars = pd.read_csv('cars.csv', index_col = 0)
+
+# Code for loop that adds COUNTRY column
+for lab, row in cars.iterrows() :
+    cars.loc[lab, "COUNTRY"] = str.upper(row["country"])
+
+
+# Print cars
+print(cars)
+
+----------------------------
+
+result:
+
+     cars_per_cap        country  drives_right        COUNTRY
+US            809  United States          True  UNITED STATES
+AUS           731      Australia         False      AUSTRALIA
+JPN           588          Japan         False          JAPAN
+IN             18          India         False          INDIA
+RU            200         Russia          True         RUSSIA
+MOR            70        Morocco          True        MOROCCO
+EG             45          Egypt          True          EGYPT
+
+
+
+
+
+---------------------------------------
+
+
+Using iterrows() to iterate over every observation of a Pandas DataFrame is easy to understand, but not very efficient. On every iteration, you're creating a new Pandas Series.
+
+If you want to add a column to a DataFrame by calling a function on another column, the iterrows() method in combination with a for loop is not the preferred way to go. Instead, you'll want to use apply().
+
+Compare the iterrows() version with the apply() version to get the same result in the brics DataFrame:
+
+for lab, row in brics.iterrows() :
+    brics.loc[lab, "name_length"] = len(row["country"])
+
+brics["name_length"] = brics["country"].apply(len)
+We can do a similar thing to call the upper() method on every name in the country column. However, upper() is a method, so we'll need a slightly different approach:
+
+
+-----------------------------------
+
+# Import cars data
+import pandas as pd
+cars = pd.read_csv('cars.csv', index_col = 0)
+
+# Use .apply(str.upper)
+for lab, row in cars.iterrows() :
+    cars.loc[lab, "COUNTRY"] = row["country"].upper()
+    
